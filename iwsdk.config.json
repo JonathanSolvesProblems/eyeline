@@ -41,7 +41,8 @@
       "sceneUnderstanding": true,
       "environmentRaycast": true,
       "spatialUI": {
-        "kit": "horizon"
+        "kit": "horizon",
+        "preferredColorScheme": "light"
       }
     }
   },

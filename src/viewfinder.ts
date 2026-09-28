@@ -88,7 +88,7 @@ export class ViewfinderSystem extends createSystem({
   init(): void {
     this.target = new WebGLRenderTarget(RT_WIDTH, RT_HEIGHT);
     this.target.texture.colorSpace = SRGBColorSpace;
-    this.lensCamera = new PerspectiveCamera(40, RT_WIDTH / RT_HEIGHT, 0.01, 50);
+    this.lensCamera = new PerspectiveCamera(40, RT_WIDTH / RT_HEIGHT, 0.02, 50);
     this.lensCamera.name = 'ShotLens';
 
     this.monitor = new Mesh(
@@ -102,7 +102,8 @@ export class ViewfinderSystem extends createSystem({
 
     const attach = (entity: Entity) => {
       entity.object3D?.add(this.lensCamera);
-      this.lensCamera.position.set(0, 0.118, -0.01);
+      // Just in front of the lens barrel, so the rig's own body is never in frame.
+      this.lensCamera.position.set(0, 0.118, -0.06);
     };
     this.queries.cams.entities.forEach(attach);
     this.cleanupFuncs.push(
