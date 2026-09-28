@@ -1,0 +1,87 @@
+<!--
+  Eyeline control panel. Panel, Divider, Button, ButtonIcon and ButtonLabel come
+  from the bundled Horizon kit; Camera and RectangleGoggles are bundled Lucide icons.
+-->
+<style>
+  .panel-root {
+    flex-direction: column;
+    width: 270px;
+  }
+  .content {
+    flex-direction: column;
+    padding-top: 12px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 12px;
+    gap: 6px;
+  }
+  .heading {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 26px;
+    color: #272727;
+  }
+  .label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #5a5f68;
+    margin-top: 6px;
+  }
+  .row {
+    flex-direction: row;
+    gap: 6px;
+  }
+  .lens {
+    width: 54px;
+    justify-content: center;
+  }
+  .wide {
+    justify-content: center;
+    margin-top: 6px;
+  }
+  .line {
+    font-size: 12px;
+    line-height: 16px;
+    color: #272727;
+  }
+  .shot {
+    font-size: 11px;
+    line-height: 15px;
+    color: #272727;
+  }
+</style>
+<Panel class="panel-root">
+  <div class="content">
+    <div class="heading">Eyeline</div>
+    <Divider></Divider>
+    <div class="label">LENS (MM)</div>
+    <div class="row">
+      <Button id="lens-24" class="lens"><ButtonLabel>24</ButtonLabel></Button>
+      <Button id="lens-35" class="lens"><ButtonLabel>35</ButtonLabel></Button>
+      <Button id="lens-50" class="lens"><ButtonLabel>50</ButtonLabel></Button>
+      <Button id="lens-85" class="lens"><ButtonLabel>85</ButtonLabel></Button>
+    </div>
+    <Button id="btn-snap" class="wide">
+      <ButtonIcon><Camera></Camera></ButtonIcon>
+      <ButtonLabel>Snap frame</ButtonLabel>
+    </Button>
+    <div class="label">EYELINES TO CREATURE</div>
+    <div id="eyeline-a" class="line">A: place the creature and an actor</div>
+    <div id="eyeline-b" class="line"> </div>
+    <div class="label">SHOT LIST</div>
+    <div id="shot-1" class="shot">No frames yet. Move the camera, then snap.</div>
+    <div id="shot-2" class="shot"> </div>
+    <div id="shot-3" class="shot"> </div>
+    <div id="shot-4" class="shot"> </div>
+    <div id="shot-5" class="shot"> </div>
+    <div id="shot-6" class="shot"> </div>
+    <Button id="xr-button" class="wide">
+      <ButtonIcon><RectangleGoggles></RectangleGoggles></ButtonIcon>
+      <ButtonLabel>Enter XR</ButtonLabel>
+    </Button>
+    <Button id="exit-button" class="wide" style="display: none">
+      <ButtonLabel>Exit to Browser</ButtonLabel>
+    </Button>
+  </div>
+</Panel>

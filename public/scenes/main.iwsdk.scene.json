@@ -1,0 +1,85 @@
+{
+  "version": "iwsdk.scene.v1",
+  "units": "meters",
+  "components": {
+    "com.iwsdk.components.IBLGradient": {
+      "sky": [0.6902, 0.749, 0.7843, 1],
+      "equator": [0.6584, 0.7084, 0.7913, 1],
+      "ground": [0.807, 0.7758, 0.7454, 1],
+      "intensity": 1
+    }
+  },
+  "resources": {},
+  "nodes": [
+    {
+      "id": "stage",
+      "name": "Stage",
+      "metadata": { "iwsdk.validation": { "allowFloating": true } },
+      "content": { "type": "asset", "asset": "stage" },
+      "transform": { "position": [0, 0.75, -0.55] },
+      "components": {
+        "SetPiece": { "role": "stage", "label": "Stage", "eyeHeight": 0 }
+      }
+    },
+    {
+      "id": "actor-a",
+      "name": "Actor A",
+      "metadata": { "iwsdk.validation": { "allowFloating": true } },
+      "content": { "type": "asset", "asset": "actor-a" },
+      "transform": { "position": [-0.08, 0.75, -0.5], "rotationDeg": [0, -35, 0] },
+      "components": {
+        "SetPiece": { "role": "actor", "label": "A", "eyeHeight": 0.16 },
+        "RayInteractable": {},
+        "DistanceGrabbable": { "movementMode": "MoveAtSource", "translate": true, "rotate": true, "scale": false }
+      }
+    },
+    {
+      "id": "actor-b",
+      "name": "Actor B",
+      "metadata": { "iwsdk.validation": { "allowFloating": true } },
+      "content": { "type": "asset", "asset": "actor-b" },
+      "transform": { "position": [0.04, 0.75, -0.6], "rotationDeg": [0, -20, 0] },
+      "components": {
+        "SetPiece": { "role": "actor", "label": "B", "eyeHeight": 0.155 },
+        "RayInteractable": {},
+        "DistanceGrabbable": { "movementMode": "MoveAtSource", "translate": true, "rotate": true, "scale": false }
+      }
+    },
+    {
+      "id": "creature",
+      "name": "Creature",
+      "metadata": { "iwsdk.validation": { "allowFloating": true } },
+      "content": { "type": "asset", "asset": "creature" },
+      "transform": { "position": [0.18, 0.75, -0.68], "rotationDeg": [0, 150, 0] },
+      "components": {
+        "SetPiece": { "role": "creature", "label": "Creature", "eyeHeight": 0.33 },
+        "RayInteractable": {},
+        "DistanceGrabbable": { "movementMode": "MoveAtSource", "translate": true, "rotate": true, "scale": false }
+      }
+    },
+    {
+      "id": "camera-rig",
+      "name": "Camera Rig",
+      "metadata": { "iwsdk.validation": { "allowFloating": true } },
+      "content": { "type": "asset", "asset": "camera-rig" },
+      "transform": { "position": [-0.24, 0.75, -0.37], "rotationDeg": [0, -50, 0] },
+      "components": {
+        "SetPiece": { "role": "camera", "label": "Camera", "eyeHeight": 0.118 },
+        "ShotCamera": { "lensMm": 35 },
+        "AudioSource": { "src": "./audio/chime.mp3", "maxInstances": 2, "playbackMode": "restart" },
+        "RayInteractable": {},
+        "DistanceGrabbable": { "movementMode": "MoveAtSource", "translate": true, "rotate": true, "scale": false }
+      }
+    },
+    {
+      "id": "controls-panel",
+      "name": "Controls Panel",
+      "content": { "type": "asset", "asset": "controls-panel" },
+      "transform": { "position": [-0.46, 1.02, -0.62], "rotationDeg": [0, 34, 0], "scale": 0.13 },
+      "components": {
+        "RayInteractable": {},
+        "ScreenSpace": { "top": "16px", "left": "16px", "width": "22vw", "height": "70%" }
+      }
+    }
+  ]
+}
