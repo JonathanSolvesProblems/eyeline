@@ -2,6 +2,7 @@ import { World } from '@iwsdk/core';
 import { signal } from '@preact/signals-core';
 import projectOptions from 'virtual:iwsdk-project';
 import { ControlsSystem } from './controls.js';
+import { PlacementSystem, StageStatus } from './placement.js';
 import { ViewfinderSystem } from './viewfinder.js';
 
 World.create(
@@ -14,8 +15,11 @@ World.create(
   globals.snapRequested = signal(0);
   globals.eyelineText = signal<string[]>([]);
   globals.shotList = signal<string[]>([]);
+  globals.stageStatus = signal<string>(StageStatus.Floating);
+  globals.resetStageRequested = signal(0);
 
   world
+    .registerSystem(PlacementSystem, { priority: 10 })
     .registerSystem(ViewfinderSystem, { priority: 20 })
     .registerSystem(ControlsSystem, { priority: 30 });
 

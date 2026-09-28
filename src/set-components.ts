@@ -24,6 +24,19 @@ export const SetPiece = createComponent('SetPiece', {
   },
 });
 
+export const Placement = {
+  Floating: 'floating',
+  Table: 'table',
+  Manual: 'manual',
+  Restored: 'restored',
+} as const;
+
+/** Where the stage sits, and whether its pose is saved between sessions. */
+export const StageAnchor = createComponent('StageAnchor', {
+  placement: { type: Types.Enum, enum: Placement, default: Placement.Floating },
+  persist: { type: Types.Boolean, default: true },
+});
+
 /** The shot camera. lensMm is a full-frame focal length; the viewfinder is a 16:9 crop. */
 export const ShotCamera = createComponent('ShotCamera', {
   lensMm: { type: Types.Float32, default: 35, min: 12, max: 200, step: 1 },

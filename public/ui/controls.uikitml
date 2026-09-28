@@ -50,11 +50,27 @@
     line-height: 15px;
     color: #272727;
   }
+  .status {
+    font-size: 12px;
+    line-height: 16px;
+    color: #272727;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 8px;
+    background-color: #e6e8ec;
+  }
 </style>
 <Panel class="panel-root">
   <div class="content">
     <div class="heading">Eyeline</div>
     <Divider></Divider>
+    <div class="label">STAGE</div>
+    <div id="stage-status" class="status">Floating in front of you. Grab the plate to move the set.</div>
+    <Button id="btn-reset-stage" class="wide">
+      <ButtonLabel>Reset stage position</ButtonLabel>
+    </Button>
     <div class="label">LENS (MM)</div>
     <div class="row">
       <Button id="lens-24" class="lens"><ButtonLabel>24</ButtonLabel></Button>

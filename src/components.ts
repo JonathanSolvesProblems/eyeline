@@ -1,4 +1,4 @@
 import { defineComponents } from '@iwsdk/core';
-import { SetPiece, ShotCamera } from './set-components.js';
+import { SetPiece, ShotCamera, StageAnchor } from './set-components.js';
 
-export default defineComponents([SetPiece, ShotCamera]);
+export default defineComponents([SetPiece, ShotCamera, StageAnchor]);

@@ -36,7 +36,8 @@ const MAX_FRAMES = 6;
 const FRAME_WIDTH = 0.1;
 const MAX_ACTORS = 4;
 const TEXT_EVERY_N_FRAMES = 12;
-const MONITOR_POSITION: [number, number, number] = [0, 1.12, -0.86];
+/** Monitor pose relative to the stage origin, so it travels with the stage. */
+const MONITOR_LOCAL: [number, number, number] = [0, 0.37, -0.31];
 
 export interface Shot {
   index: number;
@@ -71,7 +72,8 @@ export class ViewfinderSystem extends createSystem({
 }) {
   private target!: WebGLRenderTarget;
   private lensCamera!: PerspectiveCamera;
-  private monitor!: Mesh;
+  private monitor: Mesh | null = null;
+  private stageEntity: Entity | null = null;
   private lines: Line[] = [];
   private frames: (Entity | null)[] = [];
   private shots: Shot[] = [];
@@ -91,14 +93,7 @@ export class ViewfinderSystem extends createSystem({
     this.lensCamera = new PerspectiveCamera(40, RT_WIDTH / RT_HEIGHT, 0.02, 50);
     this.lensCamera.name = 'ShotLens';
 
-    this.monitor = new Mesh(
-      new PlaneGeometry(0.32, 0.18),
-      new MeshBasicMaterial({ map: this.target.texture, toneMapped: false }),
-    );
-    this.monitor.name = 'Viewfinder';
-    this.world.createTransformEntity(this.monitor);
-    this.monitor.position.set(...MONITOR_POSITION);
-    this.monitor.rotation.x = -0.15;
+    // The monitor is created once the stage entity exists; see ensureMonitor().
 
     const attach = (entity: Entity) => {
       entity.object3D?.add(this.lensCamera);
@@ -125,6 +120,24 @@ export class ViewfinderSystem extends createSystem({
     return this.shots;
   }
 
+  /** The monitor is a child of the stage, so it travels wherever the stage is placed. */
+  private ensureMonitor(): boolean {
+    if (this.monitor != null) return true;
+    const stage = this.findRole(SetRole.Stage);
+    if (stage?.object3D == null) return false;
+    this.stageEntity = stage;
+    const monitor = new Mesh(
+      new PlaneGeometry(0.32, 0.18),
+      new MeshBasicMaterial({ map: this.target.texture, toneMapped: false }),
+    );
+    monitor.name = 'Viewfinder';
+    this.world.createTransformEntity(monitor, { parent: stage });
+    monitor.position.set(...MONITOR_LOCAL);
+    monitor.rotation.x = -0.15;
+    this.monitor = monitor;
+    return true;
+  }
+
   private setLens(mm: number): void {
     this.lensCamera.fov = (2 * Math.atan(SENSOR_HEIGHT_MM / (2 * mm)) * 180) / Math.PI;
     this.lensCamera.updateProjectionMatrix();
@@ -133,7 +146,7 @@ export class ViewfinderSystem extends createSystem({
 
   update(): void {
     const cam = this.queries.cams.entities.values().next().value as Entity | undefined;
-    if (cam?.object3D == null) return;
+    if (cam?.object3D == null || !this.ensureMonitor()) return;
     this.updateEyelines();
     this.renderViewfinder();
     if (this.snapPending) {
@@ -230,7 +243,8 @@ export class ViewfinderSystem extends createSystem({
     renderer.getClearColor(this.prevClear);
     const prevAlpha = renderer.getClearAlpha();
 
-    this.monitor.visible = false;
+    const monitor = this.monitor!;
+    monitor.visible = false;
     xr.enabled = false;
     renderer.setRenderTarget(this.target);
     renderer.setClearColor(0x0f1114, 1);
@@ -241,7 +255,7 @@ export class ViewfinderSystem extends createSystem({
     renderer.setClearColor(this.prevClear, prevAlpha);
     renderer.autoClear = prevAutoClear;
     xr.enabled = xrWasEnabled;
-    this.monitor.visible = true;
+    monitor.visible = true;
   }
 
   private async captureFrame(cam: Entity): Promise<void> {
@@ -305,9 +319,9 @@ export class ViewfinderSystem extends createSystem({
       new MeshBasicMaterial({ map: texture, toneMapped: false }),
     );
     mesh.name = `Frame${index}`;
-    const entity = this.world.createTransformEntity(mesh);
+    const entity = this.world.createTransformEntity(mesh, { parent: this.stageEntity ?? undefined });
     const x = (slot - (MAX_FRAMES - 1) / 2) * (FRAME_WIDTH + 0.012);
-    mesh.position.set(MONITOR_POSITION[0] + x, MONITOR_POSITION[1] - 0.15, MONITOR_POSITION[2]);
+    mesh.position.set(MONITOR_LOCAL[0] + x, MONITOR_LOCAL[1] - 0.15, MONITOR_LOCAL[2]);
     mesh.rotation.x = -0.15;
     this.frames[slot] = entity;
   }
